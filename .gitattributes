@@ -1,0 +1,43 @@
+# 모든 텍스트 파일 저장소에 CRLF 방지
+* text=auto eol=lf
+
+# Java 소스코드
+*.java text eol=lf
+
+# Gradle 설정 파일
+*.gradle text eol=lf
+gradle-wrapper.properties text eol=lf
+
+# Git 설정 파일
+*.gitattributes text eol=lf
+*.gitignore text eol=lf
+
+# Markdown / 문서
+*.md text eol=lf
+*.txt text eol=lf
+
+# 쉘 스크립트 리눅스 서버 배포 시 필요
+*.sh text eol=lf
+
+# Batch 파일
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# JSON / YAML / XML 설정
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.xml text eol=lf
+
+# Binary files 변환하지 않음
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.jar binary
+*.war binary
+*.zip binary
+*.exe binary
+
