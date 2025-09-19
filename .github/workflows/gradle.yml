@@ -40,6 +40,13 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
 
+    # application.properties 생성
+    - name: Apply application.properties file
+      run: |
+        mkdir -p backend/src/main/resources/
+        echo "${{ secrets.APPLICATION }}" > backend/src/main/resources/application.properties
+
+
     # # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
     # # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
     # - name: Setup Gradle
