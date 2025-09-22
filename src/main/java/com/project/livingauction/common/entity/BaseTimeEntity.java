@@ -17,4 +17,5 @@ public abstract class BaseTimeEntity extends BaseCreatedEntity {
     @PreUpdate
     protected void onUpdate() { updatedAt = LocalDateTime.now(); }
     
+    
 }

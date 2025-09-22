@@ -1,10 +1,21 @@
 package com.project.livingauction.auction.entity;
 
-public class Category {
+import com.project.livingauction.common.entity.BaseIdEntity;
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-	}
+@Entity
+@Table(name = "categories")
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+public class Category extends BaseIdEntity {
 
+    @Column(length = 100, unique = true)
+    private String name;
 }
