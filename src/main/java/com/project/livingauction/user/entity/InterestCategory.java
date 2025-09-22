@@ -1,6 +1,6 @@
 package com.project.livingauction.user.entity;
 
-import java.util.Locale.Category;
+import com.project.livingauction.auction.entity.Category;
 
 import com.project.livingauction.common.entity.BaseCreatedEntity;
 
