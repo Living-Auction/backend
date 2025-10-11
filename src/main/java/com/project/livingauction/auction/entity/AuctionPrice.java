@@ -2,6 +2,7 @@ package com.project.livingauction.auction.entity;
 
 import com.project.livingauction.common.entity.BaseIdEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
@@ -17,12 +18,11 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class AuctionPrice extends BaseIdEntity {
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "item_id", unique = true, columnDefinition = "BINARY(16)")
     private AuctionItem item;
 
     private Integer startPrice;
-    private Integer instantPrice;
     private Integer minBidUnit;
     private Integer currentPrice;
 }

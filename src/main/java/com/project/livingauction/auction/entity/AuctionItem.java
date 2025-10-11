@@ -2,6 +2,7 @@ package com.project.livingauction.auction.entity;
 
 import java.time.LocalDateTime;
 
+import com.project.livingauction.auction.dto.UpdateAuctionRequestDto;
 import com.project.livingauction.common.entity.BaseTimeEntity;
 import com.project.livingauction.user.entity.User;
 
@@ -9,6 +10,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +24,7 @@ import lombok.Setter;
 public class AuctionItem extends BaseTimeEntity {
 
     @ManyToOne
-    @JoinColumn(name = "seller_id", columnDefinition = "BINARY(16)")
+    @JoinColumn(name = "user_id", columnDefinition = "BINARY(16)")
     private User seller;
 
     @Column(length = 20)
@@ -50,4 +52,17 @@ public class AuctionItem extends BaseTimeEntity {
 
     @Column(length = 50)
     private String status;
+    
+    @PrePersist
+    protected void onCreateAuctionItem() {
+        if (getCreatedAt() != null && startTime == null) {
+            startTime = getCreatedAt().plusMinutes(5);
+        }
+    }
+    
+    public void update(UpdateAuctionRequestDto updateAuctionRequestDto) {
+        this.title = updateAuctionRequestDto.getTitle();
+        this.description = updateAuctionRequestDto.getDescription();
+
+    }
 }

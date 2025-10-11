@@ -8,7 +8,7 @@ import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.Setter;
 
-@MappedSuperclass
+@MappedSuperclass 
 @Getter @Setter
 public abstract class BaseCreatedEntity extends BaseIdEntity {
 

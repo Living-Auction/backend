@@ -24,4 +24,7 @@ public class AuctionImage extends BaseIdEntity {
 
     @Column(columnDefinition = "TEXT")
     private String url;
+    
+    @Column(columnDefinition = "TEXT")
+    private String blobName;
 }
