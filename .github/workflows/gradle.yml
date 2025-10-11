@@ -40,30 +40,25 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
 
-    # application.properties 생성
-    - name: Apply application.properties file
-      run: |
-        mkdir -p backend/src/main/resources/
-        echo "${{ secrets.APPLICATION }}" > backend/src/main/resources/application.properties
-
+    - uses: actions/checkout@v2
+    - run: touch ./src/main/resources/application.properties
+    - run: echo "${{secrets.APPLICATION}}" > ./src/main/resources/application.properties
+    - uses: actions/upload-artifact@v2
+      with:
+        name: application.properties
+        path: ./src/main/resources/application.properties
+        
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
+    - name: Build with Gradle
+      run: ./gradlew clean build
+      
+    - name: Make Directory
+      run: mkdir -p deploy
 
-    # # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
-    # # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
-    # - name: Setup Gradle
-    #   uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
-
-    - name: Build with Gradle Wrapper
-      run: ./gradlew clean build -x test
-      # run: ./gradlew clean build -Dspring.profiles.active.test
-
-    - name: Upload JAR artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: app-jar
-        path: build/libs/*.jar
+    - name: Copy Jar
+      run: cp ./build/libs/*.jar ./deploy
 
     - name: Upload test reports
       if: failure()
@@ -129,7 +124,6 @@ jobs:
             docker run -d \
               --name living_auction_server \
               -e TZ=Asia/Seoul \
-              -e CORS_ALLOWED_ORIGINS=${{ secrets.CORS_ALLOWED_ORIGINS }} \
               --link redis-container:redis \
               -p 8081:8081 \
               ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest
