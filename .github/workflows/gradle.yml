@@ -43,11 +43,8 @@ jobs:
     # application.properties 생성
     - name: Apply application.properties file
       run: |
-        touch backend/src/main/resources/application.properties
+        mkdir -p backend/src/main/resources/
         echo "${{ secrets.APPLICATION }}" > backend/src/main/resources/application.properties
-        cat backend/src/main/resources/application.properties
-
-    
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
