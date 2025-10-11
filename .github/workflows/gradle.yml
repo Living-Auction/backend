@@ -41,10 +41,12 @@ jobs:
           ${{ runner.os }}-gradle-
 
     # application.properties 생성
-    - name: Apply application.properties file
+    - name: Create application.properties (for packaging into JAR)
       run: |
-        mkdir -p backend/src/main/resources/
-        echo "${{ secrets.APPLICATION }}" > backend/src/main/resources/application.properties
+        mkdir -p backend/src/main/resources
+        cat > backend/src/main/resources/application.properties <<'EOF'
+        ${{ secrets.APPLICATION }}
+        EOFs
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
