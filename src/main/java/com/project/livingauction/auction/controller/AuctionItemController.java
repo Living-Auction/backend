@@ -39,6 +39,12 @@ public class AuctionItemController {
 //		
 //	}
 	
+	@Operation(summary="테스트 API")
+	@GetMapping(value = "/test")
+	public boolean testAPi() {
+		return true;
+	}
+	
 	@Operation(summary="경매 상세 조회")
 	@GetMapping("/{id}")
 	public ResponseEntity<ResultResponse> getItem(@PathVariable("id") String id) {
