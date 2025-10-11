@@ -47,7 +47,6 @@ jobs:
         echo "${{ secrets.APPLICATION }}" > backend/src/main/resources/application.properties
 
     - name: Grant execute permission for gradlew
-      working-directory: backend
       run: chmod +x ./gradlew
 
 
@@ -57,7 +56,6 @@ jobs:
     #   uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
     - name: Build with Gradle Wrapper (skip tests)
-      working-directory: backend
       run: ./gradlew clean build -x test
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
