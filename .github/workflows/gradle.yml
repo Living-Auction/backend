@@ -30,13 +30,6 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-     # application.properties 생성
-    - name: Apply application.properties file
-      run: |
-        cd ./src/main/resources/
-        touch ./application.properties
-        echo "${{ secrets.APPLICATION }}" > ./application.properties
-
     - name: Cache Gradle packages
       uses: actions/cache@v3
       with:
@@ -59,6 +52,13 @@ jobs:
     - name: Build with Gradle Wrapper
       run: ./gradlew clean build -x test
       # run: ./gradlew clean build -Dspring.profiles.active.test
+
+         # application.properties 생성
+    - name: Apply application.properties file
+      run: |
+        cd ./src/main/resources/
+        touch ./application.properties
+        echo "${{ secrets.APPLICATION }}" > ./application.properties
 
     - name: Upload JAR artifact
       uses: actions/upload-artifact@v4
