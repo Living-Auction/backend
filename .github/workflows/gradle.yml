@@ -129,6 +129,8 @@ jobs:
             docker run -d \
               --name living_auction_server \
               -e TZ=Asia/Seoul \
+              -e CORS_ALLOWED_ORIGINS=${{ secrets.CORS_ALLOWED_ORIGINS }} \
+              --link redis-container:redis \
               -p 8081:8081 \
               ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest
               
