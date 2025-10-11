@@ -130,6 +130,7 @@ jobs:
             docker run -d \
               --name living_auction_server \
               -e TZ=Asia/Seoul \
+              -e SPRING_APPLICATION_JSON='${{ secrets.APPLICATION_JSON }}' \
               --link redis-container:redis \
               -p 8081:8081 \
               ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest
