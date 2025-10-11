@@ -30,6 +30,13 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+     # application.properties 생성
+    - name: Apply application.properties file
+      run: |
+        cd ./src/main/resources/
+        touch ./application.properties
+        echo "${{ secrets.APPLICATION }}" > ./application.properties
+
     - name: Cache Gradle packages
       uses: actions/cache@v3
       with:
@@ -39,14 +46,6 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
-
-    # application.properties 생성
-    - name: Create application.properties (for packaging into JAR)
-      run: |
-        mkdir -p backend/src/main/resources
-        cat > backend/src/main/resources/application.properties <<'EOF'
-        ${{ secrets.APPLICATION }}
-        EOFs
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
