@@ -47,7 +47,7 @@ jobs:
         echo "${{ secrets.APPLICATION }}" > backend/src/main/resources/application.properties
 
     - name: Grant execute permission for gradlew
-      run: chmod +x ./gradlew
+      run: chmod +x gradlew
 
 
     # # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
