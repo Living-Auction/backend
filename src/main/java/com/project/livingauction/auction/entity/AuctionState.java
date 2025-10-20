@@ -27,7 +27,7 @@ public class AuctionState extends BaseIdEntity {
     private Integer minBidUnit;
     private Integer currentPrice;
     
-    @Column(nullable = false, columnDefinition = "DEFAULT 0")
+    @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
     private Integer likeCount = 0;
     
 }

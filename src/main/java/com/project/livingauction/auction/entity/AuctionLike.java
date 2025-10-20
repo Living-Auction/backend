@@ -1,5 +1,6 @@
 package com.project.livingauction.auction.entity;
 
+import com.project.livingauction.common.entity.BaseIdEntity;
 import com.project.livingauction.user.entity.User;
 
 import jakarta.persistence.Entity;
@@ -18,7 +19,7 @@ import lombok.Setter;
 @Table(name = "auction_like",
        uniqueConstraints = @UniqueConstraint(name = "uk_auction_like_user_item", columnNames = {"user_id", "item_id"}))
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class AuctionLike {
+public class AuctionLike extends BaseIdEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, columnDefinition = "BINARY(16)")
     private User user;
