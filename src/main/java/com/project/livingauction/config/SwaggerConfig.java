@@ -16,8 +16,8 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-        		.addServersItem(new Server().url("https://living-auction.com").description("Production HTTPS Server"))
-        		.addServersItem(new Server().url("http://living-auction.com").description("Generated Server url"))
+//        		.addServersItem(new Server().url("https://living-auction.com").description("Production HTTPS Server"))
+//        		.addServersItem(new Server().url("http://living-auction.com").description("Generated Server url"))
                 .info(new Info()
                         .title("LivingAuction API")
                         .description("경매 API")

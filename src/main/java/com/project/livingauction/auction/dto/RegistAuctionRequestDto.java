@@ -14,15 +14,16 @@ public class RegistAuctionRequestDto {
     private String description;
 //    private String categoryId;
 //    private String locationId;
-    private Prices prices;
+    private State State;
     private Integer endTime;
 
     @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class Prices {
+    public static class State {
         private Integer startPrice;
         private Integer minBidUnit;
+        private Integer likeCount; 
     }
 }

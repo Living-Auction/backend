@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.project.livingauction.auction.entity.AuctionImage;
-import com.project.livingauction.auction.entity.AuctionPrice;
+import com.project.livingauction.auction.entity.AuctionState;
 import com.project.livingauction.auction.entity.Category;
 import com.project.livingauction.auction.entity.Location;
 
@@ -43,7 +43,7 @@ public class AuctionItemResponseDto {
     
     private final List<String> images;
 
-    public static AuctionItemResponseDto fromEntity(AuctionPrice item , List<AuctionImage> image) {
+    public static AuctionItemResponseDto fromEntity(AuctionState item , List<AuctionImage> image) {
         return AuctionItemResponseDto.builder()
         	.seller(new SellerResponseDto(item.getItem().getSeller()))
             .id(item.getId().toString())

@@ -1,6 +1,7 @@
 package com.project.livingauction.auction.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/items")
+@RequestMapping("/items")
 public class AuctionItemController {
 
     private final AuctionImageRepository auctionImageRepository;
@@ -88,5 +89,41 @@ public class AuctionItemController {
 //		auctionItemService.closeAuctionItem(id);
 //		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS));
 //	}
+	
+	@Operation(summary="경매 좋아요 등록")
+	@PostMapping(value = "/{id}/like")
+	public ResponseEntity<ResultResponse> addLikeToItem(@PathVariable("id") String itemId) {
+		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS,auctionItemService.increaseLike(UUID.fromString(itemId))));
+	}
+	
+	@Operation(summary="경매 좋아요 제거")
+	@DeleteMapping(value = "/{id}/like")
+	public ResponseEntity<ResultResponse> removeLikeFromItem(@PathVariable("id") String itemId) {
+		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS,auctionItemService.decreaseLike(UUID.fromString(itemId))));
+	}
+	
+	@Operation(summary="경매 좋아요 토글방식")
+	@PostMapping(value = "/{id}/likes")
+	public ResponseEntity<ResultResponse> likeItem(@PathVariable("id") String itemId) {
+		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS,auctionItemService.like(UUID.fromString(itemId))));
+	}
+	
+	@Operation(summary="경매 최신순 조회")
+	@GetMapping("/latest")
+	public ResponseEntity<ResultResponse> latestItem() {
+		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, auctionItemService.getLatestCreated()));
+	}
+	
+	@Operation(summary="경매 인기순 조회")
+	@GetMapping("/like")
+	public ResponseEntity<ResultResponse> likedItem() {
+		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, auctionItemService.getLatestCreated()));
+	}
+	
+	@Operation(summary="경매 마감순 조회")
+	@GetMapping("/deadline")
+	public ResponseEntity<ResultResponse> deadlineItem() {
+		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, auctionItemService.getLatestCreated()));
+	}
 
 }

@@ -1,6 +1,6 @@
 package com.project.livingauction.auction.dto;
 
-import com.project.livingauction.auction.entity.AuctionPrice;
+import com.project.livingauction.auction.entity.AuctionState;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +16,7 @@ public class PriceResponseDto {
     private final Integer minBidUnit;
     private final Integer currentPrice;
     
-    public PriceResponseDto(AuctionPrice price) {
+    public PriceResponseDto(AuctionState price) {
         this.startPrice = price.getStartPrice();
         this.minBidUnit = price.getMinBidUnit();
         this.currentPrice = price.getCurrentPrice();

@@ -3,6 +3,7 @@ package com.project.livingauction.auction.entity;
 import com.project.livingauction.common.entity.BaseIdEntity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
@@ -14,9 +15,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "auction_prices")
+@Table(name = "auction_state")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class AuctionPrice extends BaseIdEntity {
+public class AuctionState extends BaseIdEntity {
 
     @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "item_id", unique = true, columnDefinition = "BINARY(16)")
@@ -25,4 +26,8 @@ public class AuctionPrice extends BaseIdEntity {
     private Integer startPrice;
     private Integer minBidUnit;
     private Integer currentPrice;
+    
+    @Column(nullable = false, columnDefinition = "DEFAULT 0")
+    private Integer likeCount = 0;
+    
 }

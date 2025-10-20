@@ -14,11 +14,13 @@ import com.project.livingauction.auction.dto.RegistAuctionRequestDto;
 import com.project.livingauction.auction.dto.TestRegistAuctionRequestDto;
 import com.project.livingauction.auction.entity.AuctionImage;
 import com.project.livingauction.auction.entity.AuctionItem;
-import com.project.livingauction.auction.entity.AuctionPrice;
+import com.project.livingauction.auction.entity.AuctionLike;
+import com.project.livingauction.auction.entity.AuctionState;
 import com.project.livingauction.auction.model.ImageUploadResult;
 import com.project.livingauction.auction.repository.AuctionImageRepository;
-import com.project.livingauction.auction.repository.AuctionPriceRepository;
+import com.project.livingauction.auction.repository.AuctionLikeRepository;
 import com.project.livingauction.auction.repository.AuctionRepository;
+import com.project.livingauction.auction.repository.AuctionStateRepository;
 import com.project.livingauction.oauth.service.CustomOAuth2UserService;
 import com.project.livingauction.user.entity.User;
 import com.project.livingauction.user.repository.UserRepository;
@@ -30,7 +32,8 @@ import lombok.RequiredArgsConstructor;
 public class AuctionItemService {
 
     private final AuctionImageRepository auctionImageRepository;
-    private final AuctionPriceRepository auctionPriceRepository;
+    private final AuctionStateRepository auctionStateRepository;
+    private final AuctionLikeRepository auctionLikeRepository;
 	private final AuctionRepository auctionRepository;
 	private final CustomOAuth2UserService customOAuth2UserService;
 	private final AuctionImageService auctionImageService;
@@ -39,7 +42,7 @@ public class AuctionItemService {
 	@Transactional
 	public AuctionItemResponseDto getAuctionItem(String itemId) {
 		
-		AuctionPrice auctionInfo = auctionPriceRepository.findByItemId(UUID.fromString(itemId))
+		AuctionState auctionInfo = auctionStateRepository.findByItemId(UUID.fromString(itemId))
 				.orElseThrow(() -> 
 				new NoSuchElementException("요청한 경매를 찾을 수 없습니다."));
 		
@@ -81,14 +84,14 @@ public class AuctionItemService {
 					.build());
 		}
 		
-		AuctionPrice auctionprice = AuctionPrice.builder()
+		AuctionState auctionState = AuctionState.builder()
 				.item(ai)
-				.startPrice(auctionRequestDto.getPrices().getStartPrice())
-				.minBidUnit(auctionRequestDto.getPrices().getMinBidUnit())
-				.currentPrice(auctionRequestDto.getPrices().getStartPrice())
+				.startPrice(auctionRequestDto.getState().getStartPrice())
+				.minBidUnit(auctionRequestDto.getState().getMinBidUnit())
+				.currentPrice(auctionRequestDto.getState().getStartPrice())
 				.build();
 		
-		auctionPriceRepository.save(auctionprice);
+		auctionStateRepository.save(auctionState);
 		
 		return true;
 	}
@@ -120,14 +123,14 @@ public class AuctionItemService {
 					.build());
 		}
 		
-		AuctionPrice auctionprice = AuctionPrice.builder()
+		AuctionState auctionState = AuctionState.builder()
 				.item(ai)
 				.startPrice(testAuctionRequestDto.getPrices().getStartPrice())
 				.minBidUnit(testAuctionRequestDto.getPrices().getMinBidUnit())
 				.currentPrice(testAuctionRequestDto.getPrices().getStartPrice())
 				.build();
 		
-		auctionPriceRepository.save(auctionprice);
+		auctionStateRepository.save(auctionState);
 		
 		return true;
 	}
@@ -166,4 +169,89 @@ public class AuctionItemService {
 //		
 //	}
 	
+	@Transactional(readOnly = true)
+	public List<AuctionItem> getLatestCreated() {		
+		return auctionRepository.findAllByOrderByCreatedAtDesc();
+	}
+	
+	@Transactional(readOnly = true)
+	public List<AuctionItem> getLikedItem() {		
+		return auctionRepository.findAllByOrderByCreatedAtDesc();
+	}
+	
+	@Transactional(readOnly = true)
+	public List<AuctionItem> getDeadlineItem() {		
+		return auctionRepository.findByEndTimeAfterOrderByEndTimeAsc(LocalDateTime.now());
+	}
+	
+    @Transactional
+    public int increaseLike(UUID itemId) {
+        AuctionState state = auctionStateRepository.findByItemId(itemId).orElseThrow(() -> 
+			new NoSuchElementException("요청한 경매를 찾을 수 없습니다."));
+        
+        User user = customOAuth2UserService.getUserByAuthentication();
+        
+
+        if (!auctionLikeRepository.existsByUserIdAndItemId(user.getId(), itemId)) {
+            AuctionLike like = AuctionLike.builder()
+                    .user(user)
+                    .item(state.getItem())
+                    .build();
+            auctionLikeRepository.save(like);
+            
+            auctionStateRepository.incrementLikeCountByItemId(itemId);
+        }
+        
+        AuctionState refreshed = auctionStateRepository.findByItemId(itemId).orElseThrow(() ->
+        	new NoSuchElementException("요청한 경매를 찾을 수 없습니다."));
+        
+        return refreshed.getLikeCount();
+    }
+
+    @Transactional
+    public int decreaseLike(UUID itemId) {
+        AuctionState state = auctionStateRepository.findByItemId(itemId).orElseThrow(() -> 
+			new NoSuchElementException("요청한 경매를 찾을 수 없습니다."));
+        User user = customOAuth2UserService.getUserByAuthentication();
+        
+
+        if (auctionLikeRepository.existsByUserIdAndItemId(user.getId(), itemId)) {
+            AuctionLike like = auctionLikeRepository.findByUserIdAndItemId(user.getId(), itemId)
+                    .orElseThrow(() -> new NoSuchElementException("좋아요를 취소할수 없습니다."));
+            auctionLikeRepository.delete(like);
+            
+            auctionStateRepository.decrementLikeCountByItemId(itemId);
+        }
+        
+        AuctionState refreshed = auctionStateRepository.findByItemId(itemId).orElseThrow(() ->
+        	new NoSuchElementException("요청한 경매를 찾을 수 없습니다."));
+        return refreshed.getLikeCount();
+    }
+    
+    @Transactional
+    public int like(UUID itemId) {
+        AuctionState state = auctionStateRepository.findByItemId(itemId).orElseThrow(() -> 
+			new NoSuchElementException("요청한 경매를 찾을 수 없습니다."));
+        User user = customOAuth2UserService.getUserByAuthentication();
+        
+        if (auctionLikeRepository.existsByUserIdAndItemId(user.getId(), itemId)) {
+            AuctionLike like = auctionLikeRepository.findByUserIdAndItemId(user.getId(), itemId)
+                    .orElseThrow(() -> new NoSuchElementException("좋아요를 취소할수 없습니다."));
+            auctionLikeRepository.delete(like);
+            
+            auctionStateRepository.decrementLikeCountByItemId(itemId);
+        }else {
+            AuctionLike like = AuctionLike.builder()
+                    .user(user)
+                    .item(state.getItem())
+                    .build();
+            auctionLikeRepository.save(like);
+            
+            auctionStateRepository.incrementLikeCountByItemId(itemId);
+        }
+        
+        AuctionState refreshed = auctionStateRepository.findByItemId(itemId).orElseThrow(() ->
+        	new NoSuchElementException("요청한 경매를 찾을 수 없습니다."));
+        return refreshed.getLikeCount();
+    }
 }

@@ -1,5 +1,6 @@
 package com.project.livingauction.auction.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,5 +18,9 @@ public interface AuctionRepository extends JpaRepository<AuctionItem, UUID>{
 	Optional<AuctionItem> findById(UUID id);
 	
 	List<AuctionItem> findAllBySeller(User seller);
+	
+	List<AuctionItem> findAllByOrderByCreatedAtDesc();
+	
+	List<AuctionItem> findByEndTimeAfterOrderByEndTimeAsc(LocalDateTime time);
 
 }

@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class LoginController {
 
     private final JwtTokenProvider jwtTokenProvider;
