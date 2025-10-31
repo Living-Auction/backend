@@ -1,11 +1,11 @@
-package com.project.livingauction.oauth.dto;
+package com.project.livingauction.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor 
-public class LogoutRequestDto {
-    private String userId;
+public class TokenResponseDto {
     private String accessToken;
+    private String refreshToken;
 }

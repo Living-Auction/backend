@@ -1,4 +1,4 @@
-package com.project.livingauction.oauth.repository;
+package com.project.livingauction.user.repository;
 
 import java.util.concurrent.TimeUnit;
 

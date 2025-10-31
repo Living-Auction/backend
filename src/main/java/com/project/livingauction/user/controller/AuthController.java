@@ -1,4 +1,4 @@
-package com.project.livingauction.oauth.controller;
+package com.project.livingauction.user.controller;
 
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.livingauction.oauth.dto.LogoutRequestDto;
-import com.project.livingauction.oauth.dto.ReissueTokenDto;
-import com.project.livingauction.oauth.dto.TokenResponseDto;
-import com.project.livingauction.oauth.repository.TokenRepository;
-import com.project.livingauction.oauth.service.JwtTokenProvider;
+import com.project.livingauction.user.dto.LogoutRequestDto;
+import com.project.livingauction.user.dto.ReissueTokenDto;
+import com.project.livingauction.user.dto.TokenResponseDto;
+import com.project.livingauction.user.repository.TokenRepository;
+import com.project.livingauction.user.service.JwtTokenProvider;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-public class LoginController {
+public class AuthController {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final TokenRepository tokenRepository;

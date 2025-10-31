@@ -21,7 +21,7 @@ import com.project.livingauction.auction.repository.AuctionImageRepository;
 import com.project.livingauction.auction.repository.AuctionLikeRepository;
 import com.project.livingauction.auction.repository.AuctionRepository;
 import com.project.livingauction.auction.repository.AuctionStateRepository;
-import com.project.livingauction.oauth.service.CustomOAuth2UserService;
+import com.project.livingauction.user.service.CustomOAuth2UserService;
 import com.project.livingauction.user.entity.User;
 import com.project.livingauction.user.repository.UserRepository;
 

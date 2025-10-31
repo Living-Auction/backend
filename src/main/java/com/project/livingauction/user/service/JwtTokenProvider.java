@@ -1,4 +1,4 @@
-package com.project.livingauction.oauth.service;
+package com.project.livingauction.user.service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;

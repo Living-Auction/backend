@@ -1,4 +1,4 @@
-package com.project.livingauction.oauth.dto;
+package com.project.livingauction.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

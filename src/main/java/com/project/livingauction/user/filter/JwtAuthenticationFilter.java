@@ -1,12 +1,12 @@
-package com.project.livingauction.oauth.filter;
+package com.project.livingauction.user.filter;
 
 
 import java.io.IOException;
 
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.project.livingauction.oauth.repository.TokenRepository;
-import com.project.livingauction.oauth.service.JwtTokenProvider;
+import com.project.livingauction.user.repository.TokenRepository;
+import com.project.livingauction.user.service.JwtTokenProvider;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
