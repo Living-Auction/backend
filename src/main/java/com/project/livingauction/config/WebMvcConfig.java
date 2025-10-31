@@ -11,8 +11,8 @@ class WebMvcConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000",
-                        "http://living-auction.com/",
-                        "https://living-auction.com/",
+                        "http://living-auction.com",
+                        "https://living-auction.com",
                         "https://living-auction.vercel.app")
                 .allowedMethods("*")
                 .allowedHeaders("*")
