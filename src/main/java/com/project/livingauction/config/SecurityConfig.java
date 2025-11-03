@@ -26,22 +26,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> {
-                })
-                .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/items/**", "/login/**", "/oauth2/**", "/auth/**",
-                                "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**",
-                                "/users/oauth"
-                        ).permitAll()
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(
-                        new JwtAuthenticationFilter(jwtTokenProvider, tokenRepository),
-                        UsernamePasswordAuthenticationFilter.class
-                );
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(cors -> {})
+            .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers(
+                            "/items/**", "/login/**", "/oauth2/**", "/auth/**",
+                            "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**",
+                            "/users/oauth"
+                    ).permitAll()
+                    .anyRequest().authenticated()
+            )
+            .addFilterBefore(
+                    new JwtAuthenticationFilter(jwtTokenProvider, tokenRepository),
+                    UsernamePasswordAuthenticationFilter.class
+            );
 
         return http.build();
     }
