@@ -105,7 +105,7 @@ jobs:
       - name: Sanity check base image
         run: |
           set -e
-          docker pull openjdk:17-jdk-bookworm
+          docker pull eclipse-temurin:17-jdk-alpine
 
       # Docker hub 로그인 
       - name: Log in to Docker Hub
