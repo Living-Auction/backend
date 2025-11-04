@@ -88,6 +88,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: backend-jar-artifact
+          
+      #docker 베이스 이미지 확인
+      - name: Sanity check base image
+        run: |
+          set -e
+          docker pull openjdk:17
 
       # Docker hub 로그인 
       - name: Log in to Docker Hub
