@@ -13,7 +13,7 @@ class WebMvcConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:3000",
                         "http://living-auction.com",
                         "https://living-auction.com",
-                        "https://living-auction.vercel.app")
+                        "https://living-auction-service.vercel.app")
                 .allowedMethods("*")
                 .allowedHeaders("*")
                 .allowCredentials(true);
