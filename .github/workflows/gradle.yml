@@ -132,8 +132,7 @@ jobs:
               -e TZ=Asia/Seoul \
               -e SPRING_APPLICATION_JSON='${{ secrets.APPLICATION_JSON }}' \
               --link redis-container:redis \
-              -p 127.0.0.1:8081:8081 \
-              --restart unless-stopped \
+              -p 8081:8081 \
               ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest
               
           
