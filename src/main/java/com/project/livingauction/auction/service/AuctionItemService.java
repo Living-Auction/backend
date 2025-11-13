@@ -86,9 +86,9 @@ public class AuctionItemService {
 		
 		AuctionState auctionState = AuctionState.builder()
 				.item(ai)
-				.startPrice(auctionRequestDto.getState().getStartPrice())
-				.minBidUnit(auctionRequestDto.getState().getMinBidUnit())
-				.currentPrice(auctionRequestDto.getState().getStartPrice())
+				.startPrice(auctionRequestDto.getStartPrice())
+				.minBidUnit(auctionRequestDto.getMinBidUnit())
+				.currentPrice(auctionRequestDto.getStartPrice())
 				.build();
 		
 		auctionStateRepository.save(auctionState);
