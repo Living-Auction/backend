@@ -25,6 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+    	log.debug("do Filter start");
         String token = resolveToken(request);
         if (token != null && !tokenRepository.isBlacklisted(token)) {
             try {
