@@ -13,7 +13,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor 
 public class JwtAuthenticationFilter extends OncePerRequestFilter{
     private final JwtTokenProvider jwtTokenProvider;
@@ -26,7 +28,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         String token = resolveToken(request);
         if (token != null && !tokenRepository.isBlacklisted(token)) {
             try {
+            	log.debug("JWT parsing start");
                 jwtTokenProvider.parseToken(token);
+                log.debug("JWT parsing success");
             } catch (Exception e) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
                 return;
