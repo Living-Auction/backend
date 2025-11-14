@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,8 +53,9 @@ public class AuctionItemController {
 		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, auctionItemService.getAuctionItem(id)));
 	}
 	
+	@PreAuthorize("isAuthenticated()")
 	@Operation(summary="경매 등록")
-	@PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "/regist", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<ResultResponse> registAuction(@RequestPart("auctionData") RegistAuctionRequestDto auctionRequestDto,
 			@RequestPart("images") List<MultipartFile> images) {
 		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS , auctionItemService.registAuctionItem(auctionRequestDto, images)));
