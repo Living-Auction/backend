@@ -128,16 +128,16 @@ public class AuctionItemController {
 		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, auctionItemService.getLatestCreated()));
 	}
 	
-//	@Operation(summary="경매 인기순 조회")
-//	@GetMapping("/like")
-//	public ResponseEntity<ResultResponse> likedItem() {
-//		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, auctionItemService.getLatestCreated()));
-//	}
-//	
-//	@Operation(summary="경매 마감순 조회")
-//	@GetMapping("/deadline")
-//	public ResponseEntity<ResultResponse> deadlineItem() {
-//		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, auctionItemService.getLatestCreated()));
-//	}
+	@Operation(summary="경매 인기순 조회")
+	@GetMapping("/like")
+	public ResponseEntity<ResultResponse> likedItem() {
+		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, auctionItemService.getLikedItem()));
+	}
+	
+	@Operation(summary="경매 마감 임박순 조회")
+	@GetMapping("/deadline")
+	public ResponseEntity<ResultResponse> deadlineItem() {
+		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, auctionItemService.getDeadlineItem()));
+	}
 
 }

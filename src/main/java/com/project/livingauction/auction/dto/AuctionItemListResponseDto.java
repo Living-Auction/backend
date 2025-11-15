@@ -19,7 +19,6 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 public class AuctionItemListResponseDto {
-	private final SellerResponseDto seller;
 	
 	private final String id;
 
@@ -31,14 +30,13 @@ public class AuctionItemListResponseDto {
     
     private final Integer price;
 
-
-    public static AuctionItemListResponseDto fromEntity(AuctionState item) {
+    public static AuctionItemListResponseDto from(AuctionState item) {
         return AuctionItemListResponseDto.builder()
-        	.seller(new SellerResponseDto(item.getItem().getSeller()))
             .id(item.getId().toString())
             .title(item.getItem().getTitle())
             .thumbnailUrl(item.getItem().getThumbnailUrl())
             .price(item.getCurrentPrice())
+            .endTime(item.getItem().getEndTime())
             .build();
     }
     

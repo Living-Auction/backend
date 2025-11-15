@@ -63,7 +63,7 @@ public class AuctionItemService {
 		List<AuctionItemListResponseDto> responseAuctionList = new ArrayList<>();
 		
 		for(AuctionState a : auctionList) {
-			responseAuctionList.add(AuctionItemListResponseDto.fromEntity(a));
+			responseAuctionList.add(AuctionItemListResponseDto.from(a));
 		}
 		
 		return responseAuctionList;
@@ -190,18 +190,27 @@ public class AuctionItemService {
 //	}
 	
 	@Transactional(readOnly = true)
-	public List<AuctionItem> getLatestCreated() {		
-		return auctionRepository.findAllByOrderByCreatedAtDesc();
+	public List<AuctionItemListResponseDto> getLatestCreated() {				
+	    return auctionStateRepository.findAllOrderByCreatedAtDesc()
+	            .stream()
+	            .map(AuctionItemListResponseDto::from)
+	            .toList();
 	}
 	
 	@Transactional(readOnly = true)
-	public List<AuctionItem> getLikedItem() {		
-		return auctionRepository.findAllByOrderByCreatedAtDesc();
+	public List<AuctionItemListResponseDto> getLikedItem() {		
+        return auctionStateRepository.findAllOrderByLikeCountDesc()
+                .stream()
+                .map(AuctionItemListResponseDto::from)
+                .toList();
 	}
 	
 	@Transactional(readOnly = true)
-	public List<AuctionItem> getDeadlineItem() {		
-		return auctionRepository.findByEndTimeAfterOrderByEndTimeAsc(LocalDateTime.now());
+	public List<AuctionItemListResponseDto> getDeadlineItem() {		
+        return auctionStateRepository.findAllOrderByEndTimeAsc()
+                .stream()
+                .map(AuctionItemListResponseDto::from)
+                .toList();
 	}
 	
     @Transactional
