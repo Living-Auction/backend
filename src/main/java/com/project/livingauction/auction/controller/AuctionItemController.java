@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.livingauction.auction.dto.RegistAuctionRequestDto;
 import com.project.livingauction.auction.dto.TestRegistAuctionRequestDto;
+import com.project.livingauction.auction.dto.UpdateAuctionRequestDto;
 import com.project.livingauction.auction.repository.AuctionImageRepository;
 import com.project.livingauction.auction.service.AuctionItemService;
 import com.project.livingauction.result.ResultCode;
@@ -53,6 +55,12 @@ public class AuctionItemController {
 		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, auctionItemService.getAuctionItem(id)));
 	}
 	
+	@Operation(summary="경매 리스트 조회")
+	@GetMapping("/list")
+	public ResponseEntity<ResultResponse> getAuctionList() {
+		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, auctionItemService.getAuctionItemList()));
+	}
+	
 	@PreAuthorize("isAuthenticated()")
 	@Operation(summary="경매 등록")
 	@PostMapping(value = "/regist", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -68,16 +76,16 @@ public class AuctionItemController {
 		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS , auctionItemService.testRegistAuctionItem(testAuctionRequestDto, images)));
 	}
 	
-//	@Operation(summary="경매 수정")
-//	@PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//	public ResponseEntity<ResultResponse> updateAuction(@PathVariable("id") String id , @RequestPart("auctionData") UpdateAuctionRequestDto updateAuctionRequestDto,
-//			@RequestPart("images") List<MultipartFile> images) {
-//		auctionItemService.updateAuctionItem(id , updateAuctionRequestDto);
-//		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS));
-//	}
-	
+	@PreAuthorize("isAuthenticated()")
+	@Operation(summary="경매 수정")
+	@PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<ResultResponse> updateAuction(@PathVariable("id") String id , @RequestPart("auctionData") UpdateAuctionRequestDto updateAuctionRequestDto,
+			@RequestPart("images") List<MultipartFile> images) {
+		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, auctionItemService.updateAuctionItem(id , updateAuctionRequestDto, images)));
+	}
 	
 	//로그인 추가 후 본인의 경매만 삭제하는 로직 추가
+	@PreAuthorize("isAuthenticated()")
 	@Operation(summary="경매 삭제")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ResultResponse> deleteAuction(@PathVariable("id") String id) {
@@ -85,6 +93,7 @@ public class AuctionItemController {
 		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS));
 	}
 	
+//	@PreAuthorize("isAuthenticated()")
 //	@Operation(summary="경매 종료")
 //	@PatchMapping("/{id}/close")
 //	public ResponseEntity<ResultResponse> closeAuction(@PathVariable("id") String id) {
@@ -92,18 +101,21 @@ public class AuctionItemController {
 //		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS));
 //	}
 	
+	@PreAuthorize("isAuthenticated()")
 	@Operation(summary="경매 좋아요 등록")
 	@PostMapping(value = "/{id}/like")
 	public ResponseEntity<ResultResponse> addLikeToItem(@PathVariable("id") String itemId) {
 		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS,auctionItemService.increaseLike(UUID.fromString(itemId))));
 	}
 	
+	@PreAuthorize("isAuthenticated()")
 	@Operation(summary="경매 좋아요 제거")
 	@DeleteMapping(value = "/{id}/like")
 	public ResponseEntity<ResultResponse> removeLikeFromItem(@PathVariable("id") String itemId) {
 		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS,auctionItemService.decreaseLike(UUID.fromString(itemId))));
 	}
 	
+	@PreAuthorize("isAuthenticated()")
 	@Operation(summary="경매 좋아요 토글방식")
 	@PostMapping(value = "/{id}/likes")
 	public ResponseEntity<ResultResponse> likeItem(@PathVariable("id") String itemId) {
@@ -116,16 +128,16 @@ public class AuctionItemController {
 		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, auctionItemService.getLatestCreated()));
 	}
 	
-	@Operation(summary="경매 인기순 조회")
-	@GetMapping("/like")
-	public ResponseEntity<ResultResponse> likedItem() {
-		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, auctionItemService.getLatestCreated()));
-	}
-	
-	@Operation(summary="경매 마감순 조회")
-	@GetMapping("/deadline")
-	public ResponseEntity<ResultResponse> deadlineItem() {
-		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, auctionItemService.getLatestCreated()));
-	}
+//	@Operation(summary="경매 인기순 조회")
+//	@GetMapping("/like")
+//	public ResponseEntity<ResultResponse> likedItem() {
+//		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, auctionItemService.getLatestCreated()));
+//	}
+//	
+//	@Operation(summary="경매 마감순 조회")
+//	@GetMapping("/deadline")
+//	public ResponseEntity<ResultResponse> deadlineItem() {
+//		return ResponseEntity.ok(ResultResponse.of(ResultCode.SUCCESS, auctionItemService.getLatestCreated()));
+//	}
 
 }

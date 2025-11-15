@@ -2,6 +2,7 @@ package com.project.livingauction.user.controller;
 
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,6 +62,7 @@ public class AuthController {
         return ResponseEntity.ok(new LoginResponseDto(user, accessToken, refreshToken));
     }
     
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/logout")
     public String logout(@RequestBody LogoutRequestDto logOutRequestDto) {
         tokenRepository.deleteRefreshToken(logOutRequestDto.getUserId());
@@ -72,6 +74,7 @@ public class AuthController {
         return "Logged out successfully";
     }
     
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/reissueToken")
     public TokenResponseDto reissueToken(@RequestBody ReissueTokenDto reissueTokenDto) {
         String savedRefreshToken = tokenRepository.getRefreshToken(reissueTokenDto.getUserId());

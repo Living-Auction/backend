@@ -1,6 +1,7 @@
 package com.project.livingauction.auction.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -9,9 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.project.livingauction.auction.dto.AuctionItemListResponseDto;
 import com.project.livingauction.auction.dto.AuctionItemResponseDto;
 import com.project.livingauction.auction.dto.RegistAuctionRequestDto;
 import com.project.livingauction.auction.dto.TestRegistAuctionRequestDto;
+import com.project.livingauction.auction.dto.UpdateAuctionRequestDto;
 import com.project.livingauction.auction.entity.AuctionImage;
 import com.project.livingauction.auction.entity.AuctionItem;
 import com.project.livingauction.auction.entity.AuctionLike;
@@ -45,7 +48,7 @@ public class AuctionItemService {
 		AuctionState auctionInfo = auctionStateRepository.findByItemId(UUID.fromString(itemId))
 				.orElseThrow(() -> 
 				new NoSuchElementException("요청한 경매를 찾을 수 없습니다."));
-		
+			
 		List<AuctionImage> images = auctionImageRepository.findByItemId(UUID.fromString(itemId));
 		
 		return AuctionItemResponseDto.fromEntity(auctionInfo , images); 
@@ -53,11 +56,17 @@ public class AuctionItemService {
 	}
 	
 	@Transactional
-	public AuctionItem getAuctionItemList(String itemId) {
-		AuctionItem item = auctionRepository.findById(UUID.fromString(itemId))
-				.orElseThrow(() -> 
-				new NoSuchElementException("요청한 경매를 찾을 수 없습니다."));
-		return item;
+	public List<AuctionItemListResponseDto> getAuctionItemList() {
+
+		List<AuctionState> auctionList = auctionStateRepository.findAll();
+		
+		List<AuctionItemListResponseDto> responseAuctionList = new ArrayList<>();
+		
+		for(AuctionState a : auctionList) {
+			responseAuctionList.add(AuctionItemListResponseDto.fromEntity(a));
+		}
+		
+		return responseAuctionList;
 	}
 	
 	@Transactional
@@ -137,21 +146,32 @@ public class AuctionItemService {
 	
 	
 	// update delete close 에 우선적으로 로그인 없이 게시글 id 로만 삭제 가능하게 만듬
-//	@Transactional
-//	public void updateAuctionItem(String id , UpdateAuctionRequestDto updateAuctionRequestDto, List<MultipartFile> image) {
-//		AuctionItem auctionItem = auctionRepository.findById(UUID.fromString(id)).get();
-//		
-//		List<AuctionImage> imageData = auctionImageRepository.findByItemId(UUID.fromString(id));
-//		
-//		for(AuctionImage image : imageData) {
-//			testAuctionImageService.deleteAuctionImage(image.getBlobName());			
-//		}
-//		
-//		List<ImageUploadResult> images = testAuctionImageService.registAuctionImage(image);
-//		
-//		
-//		
-//	}
+	@Transactional
+	public boolean updateAuctionItem(String id , UpdateAuctionRequestDto updateAuctionRequestDto, List<MultipartFile> image) {
+		User user = customOAuth2UserService.getUserByAuthentication();
+		
+		AuctionItem auctionItem = auctionRepository.findById(UUID.fromString(id)).get();
+		
+		List<AuctionImage> imageData = auctionImageRepository.findByItemId(UUID.fromString(id));
+		
+		for(AuctionImage i : imageData) {
+			auctionImageService.deleteAuctionImage(i.getBlobName());
+		}
+			
+		List<ImageUploadResult> images = auctionImageService.registAuctionImage(image);
+		
+		auctionItem.update(updateAuctionRequestDto, images.get(0).getUrl());
+		
+		for(ImageUploadResult res : images) {
+			auctionImageRepository.save(AuctionImage.builder()
+					.item(auctionItem)
+					.url(res.getUrl())
+					.blobName(res.getBlobName())
+					.build());
+		}
+		
+		return true;
+	}
 	
 	@Transactional
 	public void deleteAuctionItem(String id) {

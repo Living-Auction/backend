@@ -60,9 +60,9 @@ public class AuctionItem extends BaseTimeEntity {
         }
     }
     
-    public void update(UpdateAuctionRequestDto updateAuctionRequestDto) {
+    public void update(UpdateAuctionRequestDto updateAuctionRequestDto , String thumbnailUrl) {
         this.title = updateAuctionRequestDto.getTitle();
         this.description = updateAuctionRequestDto.getDescription();
-
+        this.thumbnailUrl = thumbnailUrl;
     }
 }
