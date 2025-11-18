@@ -32,7 +32,7 @@ public class AuctionItemListResponseDto {
 
     public static AuctionItemListResponseDto from(AuctionState item) {
         return AuctionItemListResponseDto.builder()
-            .id(item.getId().toString())
+            .id(item.getItem().getId().toString())
             .title(item.getItem().getTitle())
             .thumbnailUrl(item.getItem().getThumbnailUrl())
             .price(item.getCurrentPrice())
