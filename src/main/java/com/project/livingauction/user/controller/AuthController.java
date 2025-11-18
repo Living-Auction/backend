@@ -59,7 +59,7 @@ public class AuthController {
         tokenRepository.saveRefreshToken(user.getId().toString(), refreshToken,
     		  jwtTokenProvider.getRefreshTokenValidity());
         
-        return ResponseEntity.ok(new LoginResponseDto(user, accessToken, refreshToken));
+        return ResponseEntity.ok(new LoginResponseDto(accessToken, refreshToken));
     }
     
     @PreAuthorize("isAuthenticated()")

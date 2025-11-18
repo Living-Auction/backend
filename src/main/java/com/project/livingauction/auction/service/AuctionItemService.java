@@ -152,6 +152,10 @@ public class AuctionItemService {
 		
 		AuctionItem auctionItem = auctionRepository.findById(UUID.fromString(id)).get();
 		
+		if(user.getId() != auctionItem.getSeller().getId()) {
+			return false;
+		}
+		
 		List<AuctionImage> imageData = auctionImageRepository.findByItemId(UUID.fromString(id));
 		
 		for(AuctionImage i : imageData) {
@@ -175,13 +179,21 @@ public class AuctionItemService {
 	
 	@Transactional
 	public void deleteAuctionItem(String id) {
-		List<AuctionImage> imageData = auctionImageRepository.findByItemId(UUID.fromString(id));
+		User user = customOAuth2UserService.getUserByAuthentication();
 		
-		for(AuctionImage image : imageData) {
-			auctionImageService.deleteAuctionImage(image.getBlobName());			
-		}
+		AuctionItem auctionItem = auctionRepository.findById(UUID.fromString(id)).get();
 		
-		auctionRepository.deleteById(UUID.fromString(id));
+		if(user.getId() == auctionItem.getSeller().getId()) {
+			List<AuctionImage> imageData = auctionImageRepository.findByItemId(UUID.fromString(id));
+			
+			for(AuctionImage image : imageData) {
+				auctionImageService.deleteAuctionImage(image.getBlobName());			
+			}
+			
+			auctionRepository.deleteById(UUID.fromString(id));
+		}.orElseThrow(() -> 
+		new NoSuchElementException("요청한 경매를 찾을 수 없습니다."));
+		
 	}
 
 //	@Transactional
