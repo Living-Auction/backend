@@ -3,6 +3,7 @@ package com.project.livingauction.auction.entity;
 import com.project.livingauction.common.entity.BaseIdEntity;
 import com.project.livingauction.user.entity.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -24,7 +25,7 @@ public class AuctionLike extends BaseIdEntity{
     @JoinColumn(name = "user_id", nullable = false, columnDefinition = "BINARY(16)")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "item_id", nullable = false, columnDefinition = "BINARY(16)")
     private AuctionItem item;
 }

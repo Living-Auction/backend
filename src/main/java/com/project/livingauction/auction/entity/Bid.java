@@ -3,6 +3,7 @@ package com.project.livingauction.auction.entity;
 import com.project.livingauction.common.entity.BaseCreatedEntity;
 import com.project.livingauction.user.entity.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,7 +19,7 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Bid extends BaseCreatedEntity {
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "item_id", columnDefinition = "BINARY(16)")
     private AuctionItem item;
 

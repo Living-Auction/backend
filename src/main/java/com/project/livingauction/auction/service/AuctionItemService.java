@@ -191,8 +191,7 @@ public class AuctionItemService {
 			}
 			
 			auctionRepository.deleteById(UUID.fromString(id));
-		}.orElseThrow(() -> 
-		new NoSuchElementException("요청한 경매를 찾을 수 없습니다."));
+		}
 		
 	}
 
