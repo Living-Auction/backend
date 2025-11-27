@@ -191,6 +191,8 @@ public class AuctionItemService {
 			}
 			
 			auctionRepository.delete(auctionItem);
+		}else {
+			throw new RuntimeException("권한이 없습니다.");
 		}
 		
 	}
