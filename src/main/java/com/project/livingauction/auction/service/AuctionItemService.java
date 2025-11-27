@@ -190,7 +190,7 @@ public class AuctionItemService {
 				auctionImageService.deleteAuctionImage(image.getBlobName());			
 			}
 			
-			auctionRepository.deleteById(UUID.fromString(id));
+			auctionRepository.delete(auctionItem);
 		}
 		
 	}
