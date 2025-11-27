@@ -25,7 +25,7 @@ public class AuctionLike extends BaseIdEntity{
     @JoinColumn(name = "user_id", nullable = false, columnDefinition = "BINARY(16)")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "item_id", nullable = false, columnDefinition = "BINARY(16)")
     private AuctionItem item;
 }

@@ -19,7 +19,7 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class AuctionImage extends BaseIdEntity {
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "item_id", columnDefinition = "BINARY(16)")
     private AuctionItem item;
 
